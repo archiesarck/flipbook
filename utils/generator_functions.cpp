@@ -25,23 +25,25 @@ bool invalid_token(string token){
 bool generate_video(Runtime *proc, vector<string> tokens){
     string folder_name;
     vector<vector<string>> frames;
-    if(tokens[1]=="nil") folder_name = "./";
+    if(tokens[2]=="nil") folder_name = "./";
     else{
-        folder_name = proc->get_folder_name(tokens[1]);
+        folder_name = proc->get_folder_name(tokens[2]);
         if(folder_name.empty()){
             cout << "Can not find variable " << folder_name << endl;
             return false;
         }
     }
-    if(tokens[2]=="nil") frames = {};
+    if(tokens[3]=="nil") frames = {};
     else{
-        frames = proc->get_frame_variable(tokens[2]);
+        frames = proc->get_frame_variable(tokens[3]);
         if(frames.empty()){
-            cout << "Can not find variable " << tokens[2] << endl;
+            cout << "Can not find variable " << tokens[3] << endl;
             return false;
         }
     }
     ofstream to_python("_images_");
+    to_python << "VIDEO\n";
+    to_python << tokens[1] + "\n";
     to_python << folder_name + "\n";
     for(int i = 0; i<frames.size(); i++){
         for(int j = 0; j<frames[i].size(); j++){
@@ -58,25 +60,37 @@ bool generate_video(Runtime *proc, vector<string> tokens){
 }
 bool generate_pdf(Runtime *proc, vector<string> tokens){
     string folder_name;
-    vector<vector<string>> image_list;
-    if(tokens[1]=="nil") folder_name = "./";
+    vector<vector<string>> frames;
+    if(tokens[2]=="nil") folder_name = "./";
     else{
-        folder_name = proc->get_folder_name(tokens[1]);
+        folder_name = proc->get_folder_name(tokens[2]);
         if(folder_name.empty()){
             cout << "Can not find variable " << folder_name << endl;
             return false;
         }
     }
-
-    if(tokens[2]=="nil") image_list = {};
+    if(tokens[3]=="nil") frames = {};
     else{
-        image_list = proc->get_frame_variable(tokens[2]);
-        if(image_list.empty()){
-            cout << "Can not find variable " << tokens[2] << endl;
+        frames = proc->get_frame_variable(tokens[3]);
+        if(frames.empty()){
+            cout << "Can not find variable " << tokens[3] << endl;
             return false;
         }
     }
-    cout << folder_name << endl;
-    for(int i = 0; i<image_list.size(); i++) cout << image_list[i][0] << endl;
+    ofstream to_python("_images_");
+    to_python << "PDF\n";
+    to_python << tokens[1] + "\n";
+    to_python << folder_name + "\n";
+    for(int i = 0; i<frames.size(); i++){
+        for(int j = 0; j<frames[i].size(); j++){
+            to_python << frames[i][j];
+            if(j!=frames[i].size()-1) to_python << "$";
+        }
+        if(i!=frames.size()-1) to_python << "\n";
+    }
+    if(frames.empty()) to_python << "nil";
+    to_python.close();
+    system("python main.py");
+    // system("rm _images_");
     return true;
 }
