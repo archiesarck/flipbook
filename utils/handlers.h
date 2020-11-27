@@ -18,5 +18,7 @@ std::string accessUList(Runtime *proc, std::vector<std::string> tokens);
 std::pair<std::string, std::pair<int, int>> accessTList(Runtime *proc, std::vector<std::string> tokens);
 bool TList2UList(Runtime *proc, std::vector<std::string> tokens);
 bool UList2Frames(Runtime *proc, std::vector<std::string> tokens);
+bool handlePosition(Runtime *proc, std::vector<std::string> tokens);
+bool handleLoops(std::ifstream &fin, Runtime *proc, unsigned int &line_number, std::vector<std::string> tokens);
 
 #endif

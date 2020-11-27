@@ -16,6 +16,7 @@ bool handleTimedList(ifstream &fin, Runtime *proc, unsigned int &line_number, st
             return true;
         }
         if(!generate_tokens(line, tokens)) continue;
+        if(tokens[0].front()=='#') continue;
         if(invalid_token(tokens[0])){
             cout << "Error at line " << line_number << endl;
             return false;
@@ -45,8 +46,8 @@ bool handleTimedList(ifstream &fin, Runtime *proc, unsigned int &line_number, st
 
 bool handleUntimedList(ifstream &fin, Runtime *proc, unsigned int &line_number, string variable_name){
     string line;
-    vector<string> file_names;
-    vector<string> tokens;
+    vector<string> file_names = {};
+    vector<string> tokens = {};
     while(fin){
         getline(fin, line);
         // cout << line << endl;
@@ -55,6 +56,7 @@ bool handleUntimedList(ifstream &fin, Runtime *proc, unsigned int &line_number, 
             return true;
         }
         if(!generate_tokens(line, tokens)) continue;
+        if(tokens[0].front()=='#') continue;
         // if(tokens.size()!=1){
         //     cout << "Untimed list takes one argument: <name>" << endl;
         //     return false;
@@ -205,4 +207,75 @@ pair<string, pair<int, int>> accessTList(Runtime *proc, vector<string> tokens){
         return {};
     }
     return proc->get_tlist_variable(tokens[1], stoi(tokens[2]));
+}
+
+bool handlePosition(Runtime *proc, vector<string> tokens){
+    if(tokens.size()<3){
+        cout << "Args does not match" << endl;
+        return false;
+    }
+    if(tokens.size()>3){
+        cout << "Args does not match" << endl;
+        return false;
+    }
+    for(int i = 0; i<tokens[2].size(); i++){
+        if(tokens[2][i]<'0' || tokens[2][i]>'9'){
+            cout << "Given value is not a number" << endl;
+            return false;
+        }
+    }
+    proc->add_position(tokens[1], tokens[2]);
+    return true;
+}
+
+bool handleLoops(ifstream &fin, Runtime *proc, unsigned int &line_number, vector<string> tokens){
+    if(!proc->valid_position(tokens[1])) return false;
+    for(int i = 0; i<tokens[2].size(); i++){
+        if(tokens[2][i]<'0' || tokens[2][i]>'9'){
+            cout << "Given value is not a number" << endl;
+            return false;
+        }
+    }
+    int i = stoi(proc->get_position(tokens[1]));
+    int end = stoi(tokens[2]);
+    cout << i << " " << end << endl;
+    string line;
+    vector<string> lines;
+    while(fin){
+        getline(fin, line);
+        line_number++;
+        if(line=="LoopEnd") break;
+        lines.push_back(line);
+        line = "";
+    }
+    for(int k = 0; k<lines.size(); k++) cout << lines[k] << endl;
+    vector<string> toks;
+    for(; i<end; i++){
+        for(int j = 0; j<lines.size(); j++){
+            if(!generate_tokens(lines[j], toks)) continue;
+            if(toks[0]=="AppendUList"){
+                // cout << "append ulist" << endl;
+                if(!appendUList(proc, toks)){
+                    cout << "Error handling AppendUlist" << endl;
+                    break;
+                }
+            }
+            else if(toks[0]=="AppendTList"){
+                if(!appendTList(proc, toks)){
+                    cout << "Error handling AppendTList" << endl;
+                    break;
+                }
+            }
+            else if(toks[0]=="AppendFrames"){
+                // cout << "append frames" << endl;
+                if(!appendFrames(proc, toks)){
+                    cout << "Error handling AppendFrames" << endl;
+                    break;
+                }
+            }
+            else cout << "Not yet defined inside loop" << endl;
+            toks = {};
+        }
+    }
+    return true;
 }

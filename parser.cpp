@@ -77,22 +77,14 @@ int main(int argc, char **argv){
             }
         }
         else if(tokens[0]=="AccessFrames"){
-            if(!accessFrames()){
-                cout << "Error handling frames" << endl;
-                break;
-            }
+            
         }
         else if(tokens[0]=="AccessUList"){
-            if(!accessUList()){
-                cout << "Error handling frames" << endl;
-                break;
-            }
+            string str = accessUList(current_process, tokens);
+            // cout << str << endl;
         }
         else if(tokens[0]=="AccessTList"){
-            if(!accessTList()){
-                cout << "Error handling frames" << endl;
-                break;
-            }
+            
         }
         else if(tokens[0]=="TList2UList"){
             if(!TList2UList(current_process, tokens)){
@@ -100,9 +92,26 @@ int main(int argc, char **argv){
                 break;
             }
         }
-        else if(tokens[0]=="UList2Frames"){}
+        else if(tokens[0]=="UList2Frames"){
+            if(!UList2Frames(current_process, tokens)){
+                cout << "Error in UList2Frames" << endl;
+                break;
+            }
+        }
+        else if(tokens[0]=="Position"){
+            if(!handlePosition(current_process, tokens)){
+                cout << "Error in position" << endl;
+                break;
+            }
+        }
+        else if(tokens[0]=="LoopBegin"){
+            if(!handleLoops(fin, current_process, line_number, tokens)){
+                cout << "Error occurred in loops" << endl;
+                break;
+            }
+        }
         else{
-            cout << "Unknown command at line: " << line_number << endl;
+            cout << "Unknown command at line: " << tokens[0] << endl;
             break;
         }
         tokens = {};

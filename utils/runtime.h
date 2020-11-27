@@ -122,6 +122,7 @@ private:
     std::unordered_map<std::string, std::string> folder_variable_table;
     std::vector<Frames*> frame_variables;
     std::unordered_map<std::string, int> frame_variable_table;
+    std::unordered_map<std::string, std::string> position_variables;
 public:
     void add_timed_image_list(std::string variable, std::vector<std::string> file_names, std::vector<std::pair<int, int>> intervals){
         image_variables.push_back(new List(true));
@@ -144,6 +145,11 @@ public:
     }
     bool add_frame_variable(std::string variable, std::vector<std::string> value){
         // std::cout << "Adding variable " << variable << std::endl;
+        if(value.empty()){
+            frame_variables.push_back(new Frames);
+            frame_variable_table[variable] = frame_variables.size();
+            return true;
+        }
         for(int i = 0; i<value.size(); i++){
             if(image_variable_table[value[i]]==0){
                 std::cout << "No variable named " << value[i] << std::endl;
@@ -273,6 +279,19 @@ public:
         image_variables.push_back(list);
         image_variable_table[ulist] = image_variables.size();
         return true;
+    }
+    void add_position(std::string variable_name, std::string value){
+        position_variables[variable_name] = value;
+    }
+    bool valid_position(std::string variable_name){
+        if(position_variables[variable_name]==""){
+            std::cout << "No variable named " << variable_name << std::endl;
+            return false;
+        }
+        return true;
+    }
+    std::string get_position(std::string variable_name){
+        return position_variables[variable_name];
     }
 };
 

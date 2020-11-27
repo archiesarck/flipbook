@@ -1,0 +1,38 @@
+UList images1
+2020-11-26 (1).png
+2020-11-26 (10).png
+2020-11-26 (12).png
+2020-11-26 (2).png
+2020-11-26 (11).png
+2020-11-26 (9).png
+end
+
+UList images2
+2020-11-26 (2).png
+2020-11-26 (11).png
+2020-11-26 (9).png
+end
+
+TList tlist
+2020-11-26 (2).png 1 3
+2020-11-26 (10).png 3 7
+2020-11-26 (12).png 7 10
+end
+
+Folder folder = ./imgs/
+
+UList img
+end
+
+Frames f
+end
+
+Position pos 1
+
+LoopBegin pos 10
+AppendFrames f img
+AppendUList img loop.jpg
+LoopEnd
+
+# UList2Frames img frame1
+GenerateVideo out.avi folder f
