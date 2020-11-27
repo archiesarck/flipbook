@@ -8,7 +8,7 @@ bool generate_tokens(string line, vector<string> &tokens){
     string token = "";
     for(int i = 0; i<line.size(); i++){
         if(line[i]==' '){
-            tokens.push_back(token);
+            if(!token.empty()) tokens.push_back(token);
             token = "";
         }
         else token += line[i];

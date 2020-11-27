@@ -170,6 +170,39 @@ bool UList2Frames(Runtime *proc, vector<string> tokens){
     return proc->ulist_to_frames(tokens[1], tokens[2]);
 }
 
-bool accessFrames(){}
-bool accessUList(){}
-bool accessTList(){}
+vector<string> accessFrames(Runtime *proc, vector<string> tokens){
+    if(tokens.size()<3){
+        cout << "Args does not match" << endl;
+        return {};
+    }
+    if(tokens.size()>3){
+        cout << "Args does not match" << endl;
+        return {};
+    }
+    vector<vector<string>> frame = proc->get_frame_variable(tokens[1]);
+    int pos = stoi(tokens[2]);
+    if(pos>=frame.size()) return {};
+    return frame[pos];
+}
+string accessUList(Runtime *proc, vector<string> tokens){
+    if(tokens.size()<3){
+        cout << "Args does not match" << endl;
+        return {};
+    }
+    if(tokens.size()>3){
+        cout << "Args does not match" << endl;
+        return {};
+    }
+    return proc->get_ulist_variable(tokens[1], stoi(tokens[2]));
+}
+pair<string, pair<int, int>> accessTList(Runtime *proc, vector<string> tokens){
+    if(tokens.size()<3){
+        cout << "Args does not match" << endl;
+        return {};
+    }
+    if(tokens.size()>3){
+        cout << "Args does not match" << endl;
+        return {};
+    }
+    return proc->get_tlist_variable(tokens[1], stoi(tokens[2]));
+}

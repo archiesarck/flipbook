@@ -172,6 +172,41 @@ public:
         // std::cout << frame_variable_table[variable]-1 << std::endl;
         return frame_variables[frame_variable_table[variable]-1]->get_frames();
     }
+    std::pair<std::string, std::pair<int, int>> get_tlist_variable(std::string variable_name, int pos){
+        if(image_variable_table[variable_name]==0){
+            std::cout << "No variable found with name " << variable_name << std::endl;
+            return {};
+        }
+        int location = image_variable_table[variable_name]-1;
+        if(!image_variables[location]->timed){
+            std::cout << "Requested list is a UList: " << variable_name << std::endl;
+            return {};
+        }
+        std::vector<std::string> ret_names = image_variables[location]->file_names;
+        std::vector<std::pair<int, int>> ret_pairs = image_variables[location]->intervals;
+        if(pos>=ret_names.size()){
+            std::cout << "Out of bounds for variable " << variable_name << std::endl;
+            return {};
+        }
+        return make_pair(ret_names[pos], ret_pairs[pos]);
+    }
+    std::string get_ulist_variable(std::string variable_name, int pos){
+        if(image_variable_table[variable_name]==0){
+            std::cout << "No variable found with name " << variable_name << std::endl;
+            return {};
+        }
+        int location = image_variable_table[variable_name]-1;
+        if(image_variables[location]->timed){
+            std::cout << "Requested list is a TList: " << variable_name << std::endl;
+            return {};
+        }
+        std::vector<std::string> ret_names = image_variables[location]->file_names;
+        if(pos>=ret_names.size()){
+            std::cout << "Out of bounds for variable " << variable_name << std::endl;
+            return {};
+        }
+        return ret_names[pos];
+    }
     bool append_ulist(std::string variable, std::string value){
         if(image_variable_table[variable]==0){
             std::cout << "No varible named " << variable << std::endl;

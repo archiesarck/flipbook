@@ -13,9 +13,9 @@ bool handleFrames(std::ifstream &fin, Runtime *proc, unsigned int &line_number, 
 bool appendUList(Runtime *proc, std::vector<std::string> tokens);
 bool appendTList(Runtime *proc, std::vector<std::string> tokens);
 bool appendFrames(Runtime *proc, std::vector<std::string> tokens);
-bool accessFrames();
-bool accessUList();
-bool accessTList();
+std::vector<std::string> accessFrames(Runtime *proc, std::vector<std::string> tokens);
+std::string accessUList(Runtime *proc, std::vector<std::string> tokens);
+std::pair<std::string, std::pair<int, int>> accessTList(Runtime *proc, std::vector<std::string> tokens);
 bool TList2UList(Runtime *proc, std::vector<std::string> tokens);
 bool UList2Frames(Runtime *proc, std::vector<std::string> tokens);
 
