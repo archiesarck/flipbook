@@ -42,9 +42,9 @@ These are there to define any directory where the selected images are from.
 Each UList represent single frame.
 
 * Generating Video: Implemented as-
-## GenerateVideo <file_name> <Folder> <Frames>
-## file_name is output file name, Folder and Frames variable need to be passed.
+-- GenerateVideo <file_name> <Folder> <Frames>
+-- file_name is output file name, Folder and Frames variable need to be passed.
 
 * Generating PDF: Implemented as-
-## GeneratePDF <file_name> <Folder> <Frames>
-## file_name is output file name, Folder and Frames variable need to be passed.
+-- GeneratePDF <file_name> <Folder> <Frames>
+-- file_name is output file name, Folder and Frames variable need to be passed.
