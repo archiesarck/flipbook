@@ -16,7 +16,6 @@ bool appendFrames(Runtime *proc, std::vector<std::string> tokens);
 bool accessFrames();
 bool accessUList();
 bool accessTList();
-
 bool TList2UList(Runtime *proc, std::vector<std::string> tokens);
 bool UList2Frames(Runtime *proc, std::vector<std::string> tokens);
 

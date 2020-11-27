@@ -16,25 +16,25 @@ bool handleTimedList(ifstream &fin, Runtime *proc, unsigned int &line_number, st
             return true;
         }
         if(!generate_tokens(line, tokens)) continue;
-        if(tokens.size()!=3){
-            cout << "Timed list will take 3 arguments <name> <start> <end>" << endl;
-            return false;
-        }
         if(invalid_token(tokens[0])){
             cout << "Error at line " << line_number << endl;
             return false;
         }
-        if(tokens.size()!=3){
+        if(tokens.size()<3){
             cout << "Parsing error at line: " << line_number << endl;
             return false;
         }
-        int start = stof(tokens[1]), end = stof(tokens[2]);
+        int s = tokens.size();
+        int start = stof(tokens[s-2]), end = stof(tokens[s-1]);
         if(start > end){
             cout << "Start time cannot be greater than end time" << endl;
             return false;
         }
-        file_names.push_back(tokens[0]);
-        intervals.push_back(make_pair(stoi(tokens[1]), stoi(tokens[2])));
+        string name = "";
+        for(int i = 0; i<s-2; i++) name += (tokens[i]+" ");
+        name.pop_back();
+        file_names.push_back(name);
+        intervals.push_back(make_pair(start, end));
         // TODO: Sanity check for start_time <= end_time
         tokens = {};
         line_number++;
@@ -55,15 +55,15 @@ bool handleUntimedList(ifstream &fin, Runtime *proc, unsigned int &line_number, 
             return true;
         }
         if(!generate_tokens(line, tokens)) continue;
-        if(tokens.size()!=1){
-            cout << "Untimed list takes one argument: <name>" << endl;
-            return false;
-        }
-        if(invalid_token(tokens[0])){
+        // if(tokens.size()!=1){
+        //     cout << "Untimed list takes one argument: <name>" << endl;
+        //     return false;
+        // }
+        if(invalid_token(line)){
             cout << "Error at line " << line_number << endl;
             return false;
         }
-        file_names.push_back(tokens[0]);
+        file_names.push_back(line);
         // TODO: Sanity check for start_time <= end_time
         tokens = {};
         line_number++;
@@ -158,7 +158,17 @@ bool TList2UList(Runtime *proc, vector<string> tokens){
     }
     return proc->tlist_to_ulist(tokens[1], tokens[2]);
 };
-bool UList2Frames();
+bool UList2Frames(Runtime *proc, vector<string> tokens){
+    if(tokens.size()<3){
+        cout << "Args does not match" << endl;
+        return false;
+    }
+    if(tokens.size()>3){
+        cout << "Args does not match" << endl;
+        return false;
+    }
+    return proc->ulist_to_frames(tokens[1], tokens[2]);
+}
 
 bool accessFrames(){}
 bool accessUList(){}

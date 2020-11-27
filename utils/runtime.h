@@ -64,6 +64,23 @@ public:
         }
         return _frames;
     }
+    std::vector<std::vector<std::string>> convert_to_frames(int start, int end, int quantum){
+        if(end==-1) end = file_names.size();
+        if(end>file_names.size()){
+            std::cout << "out of bound" << std::endl;
+            return {};
+        }
+        std::vector<std::vector<std::string>> _frames;
+        for(int i = start; i<end; i++){
+            if(timed){
+                for(int j = intervals[i].first; j<intervals[i].second; j++){
+                    _frames.push_back({file_names[i]});
+                }
+            }
+            else _frames.push_back({file_names[i]});
+        }
+        return _frames;
+    }
     std::vector<std::string> convert_to_frame(){
         if(timed){
             std::cout << "Cannot convert timed list to frames" << std::endl;
@@ -87,6 +104,9 @@ public:
         _frames_.push_back(frame);
         if(time_stamps.empty()) time_stamps.push_back(0);
         else time_stamps.push_back(time_stamps.back()+quantum);
+    }
+    void assign_frame(std::vector<std::vector<std::string>> _frames){
+        _frames_ = _frames;
     }
     std::vector<std::vector<std::string>> get_frames(){
         return _frames_;
@@ -184,7 +204,22 @@ public:
         frame_variables[frame_location]->add_frame(image_variables[image_location]->file_names);
         return true;
     }
-    bool ulist_to_frames(){}
+    bool ulist_to_frames(std::string ulist, std::string frames){
+        if(image_variable_table[ulist]==0){
+            std::cout << "No variable named " << ulist << std::endl;
+            return false;
+        }
+        int location = image_variable_table[ulist]-1;
+        if(image_variables[location]->timed){
+            std::cout << "Given list is timed" << std::endl;
+            return false;
+        }
+        Frames *frame = new Frames;
+        frame->assign_frame(image_variables[location]->convert_to_frames(0,-1,1));
+        frame_variables.push_back(frame);
+        frame_variable_table[frames] = frame_variables.size();
+        return true;
+    }
     bool tlist_to_ulist(std::string tlist, std::string ulist){
         if(image_variable_table[tlist]==0){
             std::cout << "No variable named " << tlist << std::endl;

@@ -41,10 +41,19 @@ bool generate_video(Runtime *proc, vector<string> tokens){
             return false;
         }
     }
+    ofstream to_python("_images_");
+    to_python << folder_name + "\n";
     for(int i = 0; i<frames.size(); i++){
-        for(int j = 0; j<frames[i].size(); j++) cout << frames[i][j] << " ";
-        cout << endl;
+        for(int j = 0; j<frames[i].size(); j++){
+            to_python << frames[i][j];
+            if(j!=frames[i].size()-1) to_python << "$";
+        }
+        if(i!=frames.size()-1) to_python << "\n";
     }
+    if(frames.empty()) to_python << "nil";
+    to_python.close();
+    system("python main.py");
+    // system("rm _images_");
     return true;
 }
 bool generate_pdf(Runtime *proc, vector<string> tokens){
