@@ -79,7 +79,7 @@ bool handleFolder(vector<string> tokens, Runtime *proc){
         return false;
     }
     string folder_name = "";
-    for(int i = 3; i<tokens.size(); i++) folder_name += (tokens[i] + " ");
+    for(int i = 2; i<tokens.size(); i++) folder_name += (tokens[i] + " ");
     folder_name.pop_back();
     proc->add_folder_variable(tokens[1], folder_name);
     // cout << folder_name << endl;

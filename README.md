@@ -43,11 +43,11 @@ UList list2
 .
 .
 end
-
-Each UList represent single frame.
+```
+Each *UList* represent single frame.
 
 * Generating Video: Implemented as-
-``  
+```
 GenerateVideo <file_name> <Folder> <Frames>
 ```
 *file_name* is output file name, Folder and Frames variable need to be passed.
@@ -57,3 +57,38 @@ GenerateVideo <file_name> <Folder> <Frames>
 GeneratePDF <file_name> <Folder> <Frames>
 ```
 *file_name* is output file name, Folder and Frames variable need to be passed.
+
+Sample code is as:
+```
+UList images2
+2020-11-26 (2).png
+2020-11-26 (11).png
+2020-11-26 (9).png
+end
+
+TList tlist
+2020-11-26 (2).png 1 3
+2020-11-26 (10).png 3 7
+2020-11-26 (12).png 7 10
+end
+
+Folder folder ./imgs/
+
+# create empty UList variable img
+UList img
+end
+
+# create empty Frames variable f
+Frames f
+end
+
+Position pos 1
+
+# A basic loop
+LoopBegin pos 10
+AppendFrames f img
+AppendUList img loop.jpg
+LoopEnd
+
+GenerateVideo out.avi folder f
+```

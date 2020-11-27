@@ -19,7 +19,7 @@ TList tlist
 2020-11-26 (12).png 7 10
 end
 
-Folder folder = ./imgs/
+Folder folder ./imgs/
 
 UList img
 end
