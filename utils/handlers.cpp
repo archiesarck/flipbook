@@ -112,3 +112,54 @@ bool handleFrames(ifstream &fin, Runtime *proc, unsigned int &line_number, strin
     }
     return false;
 }
+
+bool appendUList(Runtime *proc, vector<string> tokens){
+    if(tokens.size()<3){
+        cout << "Args does not match" << endl;
+        return false;
+    }
+    if(tokens.size()>3){
+        cout << "Args does not match" << endl;
+        return false;
+    }
+    return proc->append_ulist(tokens[1], tokens[2]);
+}
+bool appendTList(Runtime *proc, vector<string> tokens){
+    if(tokens.size()<5){
+        cout << "Args does not match" << endl;
+        return false;
+    }
+    if(tokens.size()>5){
+        cout << "Args does not match" << endl;
+        return false;
+    }
+    return proc->append_tlist(tokens[1], tokens[2], make_pair(stoi(tokens[3]), stoi(tokens[4])));
+}
+bool appendFrames(Runtime *proc, vector<string> tokens){
+    if(tokens.size()<3){
+        cout << "Args does not match" << endl;
+        return false;
+    }
+    if(tokens.size()>3){
+        cout << "Args does not match" << endl;
+        return false;
+    }
+    return proc->append_frames(tokens[1], tokens[2]);
+}
+
+bool TList2UList(Runtime *proc, vector<string> tokens){
+    if(tokens.size()<3){
+        cout << "Args does not match" << endl;
+        return false;
+    }
+    if(tokens.size()>3){
+        cout << "Args does not match" << endl;
+        return false;
+    }
+    return proc->tlist_to_ulist(tokens[1], tokens[2]);
+};
+bool UList2Frames();
+
+bool accessFrames(){}
+bool accessUList(){}
+bool accessTList(){}

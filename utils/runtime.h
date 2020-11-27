@@ -21,43 +21,46 @@ public:
         file_names = files;
         intervals = _intervals;
     }
-    void insert_timed(std::string file_name, std::pair<int, int> interval){
+    bool insert_timed(std::string file_name, std::pair<int, int> interval){
         if(!timed){
             std::cout << "This is a timed list: ";
-            return;
+            return false;
         }
         file_names.push_back(file_name);
         intervals.push_back(interval);
+        return true;
     }
 
-    void assign_untimed(std::vector<std::string> files){
+    bool assign_untimed(std::vector<std::string> files){
         if(timed){
             std::cout << "This is a untimed list: ";
-            return;
+            return false;
         }
         file_names = files;
+        return true;
     }
-    void insert_untimed(std::string file_name){
+    bool insert_untimed(std::string file_name){
         if(timed){
             std::cout << "This is a untimed list: ";
-            return;
+            return false;
         }
         file_names.push_back(file_name);
+        return true;
     }
-    std::vector<std::vector<std::string>> convert_to_frames(int start, int end, int quantum){
+    std::vector<std::string> convert_to_ulist(int start, int end, int quantum){
         if(end==-1) end = file_names.size();
         if(end>file_names.size()){
             std::cout << "out of bound" << std::endl;
             return {};
         }
-        std::vector<std::vector<std::string>> _frames;
+        std::vector<std::string> _frames;
         for(int i = start; i<end; i++){
             if(timed){
                 for(int j = intervals[i].first; j<intervals[i].second; j++){
                     _frames.push_back({file_names[i]});
                 }
             }
-            else _frames.push_back({file_names[i]});
+            else _frames.push_back(file_names[i]);
         }
         return _frames;
     }
@@ -148,6 +151,58 @@ public:
         }
         // std::cout << frame_variable_table[variable]-1 << std::endl;
         return frame_variables[frame_variable_table[variable]-1]->get_frames();
+    }
+    bool append_ulist(std::string variable, std::string value){
+        if(image_variable_table[variable]==0){
+            std::cout << "No varible named " << variable << std::endl;
+            return false;
+        }
+        return image_variables[image_variable_table[variable]-1]->insert_untimed(value);
+    }
+    bool append_tlist(std::string variable, std::string value, std::pair<int, int> interval){
+        if(image_variable_table[variable]==0){
+            std::cout << "No varible named " << variable << std::endl;
+            return false;
+        }
+        return image_variables[image_variable_table[variable]-1]->insert_timed(value, interval);
+    }
+    bool append_frames(std::string variable, std::string value_variable){
+        if(frame_variable_table[variable]==0){
+            std::cout << "No varible named " << variable << std::endl;
+            return false;
+        }
+        if(image_variable_table[value_variable]==0){
+            std::cout << "No varible named " << variable << std::endl;
+            return false;
+        }
+        int image_location = image_variable_table[value_variable]-1;
+        if(image_variables[image_location]->timed){
+            std::cout << "Cannot add TList to Frames: " << variable << std::endl;
+            return false;
+        }
+        int frame_location = frame_variable_table[variable]-1;
+        frame_variables[frame_location]->add_frame(image_variables[image_location]->file_names);
+        return true;
+    }
+    bool ulist_to_frames(){}
+    bool tlist_to_ulist(std::string tlist, std::string ulist){
+        if(image_variable_table[tlist]==0){
+            std::cout << "No variable named " << tlist << std::endl;
+            return false;
+        }
+        int location = image_variable_table[tlist]-1;
+        if(!image_variables[location]->timed){
+            std::cout << "Given list is not timed" << std::endl;
+            return false;
+        }
+        List *list = new List(false);
+        if(!list->assign_untimed(image_variables[location]->convert_to_ulist(0, -1, 1))){
+            std::cout << "Error occured while converting" << std::endl;
+            return false;
+        }
+        image_variables.push_back(list);
+        image_variable_table[ulist] = image_variables.size();
+        return true;
     }
 };
 
