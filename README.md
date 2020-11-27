@@ -7,22 +7,22 @@ Language to convert set of images to video/pdf (HASURA Tech Task)
 
 # Primitives
 * TList: Defined as-
-## TList <variable_name>
-## <file_name> <start_time> <end_time>
-## <file_name> <start_time> <end_time>
-## .
-## .
-## End
+#### TList <variable_name>
+#### <file_name> <start_time> <end_time>
+#### <file_name> <start_time> <end_time>
+#### .
+#### .
+#### End
 
 These are timed list, which says starting and ending time/page of a file
 
 * UList: Defined as-
-## UList <variable_name>
-## <file_name>
-## <file_name>
-## .
-## .
-## End
+#### UList <variable_name>
+#### <file_name>
+#### <file_name>
+#### .
+#### .
+#### End
 
 These are untimed list, assumed to be one per frame.
 
