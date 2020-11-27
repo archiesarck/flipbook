@@ -58,6 +58,49 @@ int main(int argc, char **argv){
                 break;
             }
         }
+        else if(tokens[0]=="AppendUList"){
+            if(!appendUList(current_process, tokens)){
+                cout << "Error handling frames" << endl;
+                break;
+            }
+        }
+        else if(tokens[0]=="AppendTList"){
+            if(!appendTList(current_process, tokens)){
+                cout << "Error handling frames" << endl;
+                break;
+            }
+        }
+        else if(tokens[0]=="AppendFrames"){
+            if(!appendFrames(current_process, tokens)){
+                cout << "Error handling frames" << endl;
+                break;
+            }
+        }
+        else if(tokens[0]=="AccessFrames"){
+            if(!accessFrames()){
+                cout << "Error handling frames" << endl;
+                break;
+            }
+        }
+        else if(tokens[0]=="AccessUList"){
+            if(!accessUList()){
+                cout << "Error handling frames" << endl;
+                break;
+            }
+        }
+        else if(tokens[0]=="AccessTList"){
+            if(!accessTList()){
+                cout << "Error handling frames" << endl;
+                break;
+            }
+        }
+        else if(tokens[0]=="TList2UList"){
+            if(!TList2UList(current_process, tokens)){
+                cout << "Error in TList2UList" << endl;
+                break;
+            }
+        }
+        else if(tokens[0]=="UList2Frames"){}
         else{
             cout << "Unknown command at line: " << line_number << endl;
             break;
