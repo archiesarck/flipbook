@@ -5,8 +5,13 @@ using namespace std;
 bool generate_tokens(string line, vector<string> &tokens){
     if(line.empty()) return false;
     if(line[0]=='\n') return false;
+    if(line[0]=='#') return false;
     string token = "";
     for(int i = 0; i<line.size(); i++){
+        if(line[i]=='#'){
+            if(!token.empty()) tokens.push_back(token);
+            return true;
+        }
         if(line[i]==' '){
             if(!token.empty()) tokens.push_back(token);
             token = "";
@@ -54,7 +59,7 @@ bool generate_video(Runtime *proc, vector<string> tokens){
     }
     if(frames.empty()) to_python << "nil";
     to_python.close();
-    system("python main.py");
+    // system("python main.py");
     // system("rm _images_");
     return true;
 }
@@ -90,7 +95,7 @@ bool generate_pdf(Runtime *proc, vector<string> tokens){
     }
     if(frames.empty()) to_python << "nil";
     to_python.close();
-    system("python main.py");
+    // system("python main.py");
     // system("rm _images_");
     return true;
 }

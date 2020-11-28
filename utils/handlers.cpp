@@ -79,7 +79,7 @@ bool handleFolder(vector<string> tokens, Runtime *proc){
         return false;
     }
     string folder_name = "";
-    for(int i = 2; i<tokens.size(); i++) folder_name += (tokens[i] + " ");
+    for(int i = 3; i<tokens.size(); i++) folder_name += (tokens[i] + " ");
     folder_name.pop_back();
     proc->add_folder_variable(tokens[1], folder_name);
     // cout << folder_name << endl;
@@ -114,17 +114,34 @@ bool handleFrames(ifstream &fin, Runtime *proc, unsigned int &line_number, strin
     }
     return false;
 }
-
+string accessUList(Runtime *proc, vector<string> tokens){
+    if(tokens.size()<3){
+        cout << "Args does not match" << endl;
+        return {};
+    }
+    if(tokens.size()>3){
+        cout << "Args does not match" << endl;
+        return {};
+    }
+    return proc->get_ulist_variable(tokens[1], tokens[2]);
+}
 bool appendUList(Runtime *proc, vector<string> tokens){
     if(tokens.size()<3){
         cout << "Args does not match" << endl;
         return false;
     }
-    if(tokens.size()>3){
-        cout << "Args does not match" << endl;
-        return false;
+    // if(tokens.size()>3){
+    //     cout << "Args does not match" << endl;
+    //     return false;
+    // }
+    if(tokens[2]=="$"){
+        if(tokens.size()!=6) return false;
+        // cout << tokens[3] << " " << tokens[4] << " " << tokens[5] << endl;
+        string ulist = accessUList(proc, {tokens[3], tokens[4], tokens[5]});
+        // cout << ulist << endl;
+        return proc->append_ulist(tokens[1], ulist);
     }
-    return proc->append_ulist(tokens[1], tokens[2]);
+    else return proc->append_ulist(tokens[1], tokens[2]);
 }
 bool appendTList(Runtime *proc, vector<string> tokens){
     if(tokens.size()<5){
@@ -186,17 +203,7 @@ vector<string> accessFrames(Runtime *proc, vector<string> tokens){
     if(pos>=frame.size()) return {};
     return frame[pos];
 }
-string accessUList(Runtime *proc, vector<string> tokens){
-    if(tokens.size()<3){
-        cout << "Args does not match" << endl;
-        return {};
-    }
-    if(tokens.size()>3){
-        cout << "Args does not match" << endl;
-        return {};
-    }
-    return proc->get_ulist_variable(tokens[1], stoi(tokens[2]));
-}
+
 pair<string, pair<int, int>> accessTList(Runtime *proc, vector<string> tokens){
     if(tokens.size()<3){
         cout << "Args does not match" << endl;
@@ -238,7 +245,7 @@ bool handleLoops(ifstream &fin, Runtime *proc, unsigned int &line_number, vector
     }
     int i = stoi(proc->get_position(tokens[1]));
     int end = stoi(tokens[2]);
-    cout << i << " " << end << endl;
+    // cout << i << " " << end << endl;
     string line;
     vector<string> lines;
     while(fin){
@@ -248,7 +255,7 @@ bool handleLoops(ifstream &fin, Runtime *proc, unsigned int &line_number, vector
         lines.push_back(line);
         line = "";
     }
-    for(int k = 0; k<lines.size(); k++) cout << lines[k] << endl;
+    // for(int k = 0; k<lines.size(); k++) cout << lines[k] << endl;
     vector<string> toks;
     for(; i<end; i++){
         for(int j = 0; j<lines.size(); j++){
@@ -273,9 +280,10 @@ bool handleLoops(ifstream &fin, Runtime *proc, unsigned int &line_number, vector
                     break;
                 }
             }
-            else cout << "Not yet defined inside loop" << endl;
+            else cout << "Not yet defined inside loop " << toks[0] << endl;
             toks = {};
         }
+        proc->add_position(tokens[1], to_string(i+1));
     }
     return true;
 }

@@ -196,7 +196,7 @@ public:
         }
         return make_pair(ret_names[pos], ret_pairs[pos]);
     }
-    std::string get_ulist_variable(std::string variable_name, int pos){
+    std::string get_ulist_variable(std::string variable_name, std::string pos_var){
         if(image_variable_table[variable_name]==0){
             std::cout << "No variable found with name " << variable_name << std::endl;
             return {};
@@ -207,6 +207,11 @@ public:
             return {};
         }
         std::vector<std::string> ret_names = image_variables[location]->file_names;
+        if(position_variables[pos_var]==""){
+            std::cout << "Invalid position variable " << variable_name << std::endl;
+            return {};
+        }
+        int pos = stoi(position_variables[pos_var]);
         if(pos>=ret_names.size()){
             std::cout << "Out of bounds for variable " << variable_name << std::endl;
             return {};
@@ -218,6 +223,7 @@ public:
             std::cout << "No varible named " << variable << std::endl;
             return false;
         }
+        // std::cout << image_variables[image_variable_table[variable]-1]->file_names.size() << std::endl;
         return image_variables[image_variable_table[variable]-1]->insert_untimed(value);
     }
     bool append_tlist(std::string variable, std::string value, std::pair<int, int> interval){
