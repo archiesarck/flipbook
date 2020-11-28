@@ -14,6 +14,7 @@ TList <variable_name>
 .
 .
 End
+# <end_time> is not included
 ```
 These are timed list, which says starting and ending time/page of a file
 
@@ -97,3 +98,92 @@ GenerateVideo out.avi folder f
 $  g++ -std=c++11 .\utils\handlers.cpp .\utils\generator_functions.cpp -o parser.exe .\parser.cpp
 $ ./parser test.flip
 ```
+
+* Funcions:
+```
+AppendUList <UList> <file_name> : appends file_name to given UList
+AppendTList <TList> <file_name> <start> <end> : appends file_name with interval to given TList
+AppendFrames <Frames> <UList> : appends given UList to Frame
+AccessUList <UList> <Position> : returns file_name at given position in given UList
+UList2Frames <UList> <Frames> : convert given UList to Frames
+TList2UList <TList> <UList> : converts TList to UList
+```
+If we define Position FPS (FPS can be seen as reserved keyword for FPS in video) before calling this function, if FPS is negative then it will write frame wise other wise it will write time-wise. Example:
+```
+Position FPS 3
+TList tlist
+a1.png 1 2
+a2.png 2 3
+end
+
+TList2UList tlist ulist
+```
+FPS is 3, so for given time 1-2, each second need 3 frames. Entries of ulist will be:
+```
+a1.png
+a1.png
+a1.png
+a2.png
+a2.png
+a2.png
+```
+For negative FPS, we are writing each frame, but with |FPS| frames per second:
+```
+Position FPS -3
+TList tlist
+a1.png 1 3
+a2.png 3 5
+end
+
+TList2UList tlist ulist
+```
+Entries of ulist will be:
+```
+a1.png
+a2.png
+```
+* Loops (very basic ones)
+```
+# this is an empty UList
+UList ulist
+end
+
+#create a position variable
+Position pos 0
+
+# LoopBegin <Position> <number>
+# loops while pos < <number>
+LoopBegin pos 10
+AppendUList ulist image1.png
+LoopEnd
+
+# Will return with ulist having 10 image1.png
+```
+Loops can be useful here:
+```
+Position FPS 8
+TList tlist
+image1.png 1 3
+image2.png 3 6
+End
+
+# This will give a ulist of lenght 40
+TList2UList tlist ulist1
+
+UList ulist2
+end
+
+Position pos 0
+LoopBegin pos 40
+AppendUList ulist2 $ AccessUList ulist1 pos
+LoopEnd
+
+# will copy ulist1 to ulist2
+```
+$ just means that the control from now on will be trandered to AccessUList.
+
+Basic tokenisation is built, hence space between each different token is required.
+
+* Future Scopes
+1. Implementing Advanced Tokenisation.
+2. Layered Frames: Frames are List of Lists, each list for a frame to show. Layering of images can be implemented.
