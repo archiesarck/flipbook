@@ -95,6 +95,7 @@ GenerateVideo out.avi folder f
 ```
 * Compilation and Execution
 ```
+Windows
 $  g++ -std=c++11 .\utils\handlers.cpp .\utils\generator_functions.cpp -o parser.exe .\parser.cpp
 $ ./parser test.flip
 ```
