@@ -225,7 +225,10 @@ bool handlePosition(Runtime *proc, vector<string> tokens){
         cout << "Args does not match" << endl;
         return false;
     }
-    for(int i = 0; i<tokens[2].size(); i++){
+    // cout << tokens[2] << endl;
+    int i = 0;
+    if(tokens[2].size()!=1 && tokens[2][i]=='-') i = 1;
+    for(; i<tokens[2].size(); i++){
         if(tokens[2][i]<'0' || tokens[2][i]>'9'){
             cout << "Given value is not a number" << endl;
             return false;

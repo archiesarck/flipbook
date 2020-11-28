@@ -47,7 +47,7 @@ bool generate_video(Runtime *proc, vector<string> tokens){
         }
     }
     ofstream to_python("_images_");
-    to_python << "VIDEO\n";
+    to_python << "VIDEO " + to_string(abs(proc->get_fps())) + "\n";
     to_python << tokens[1] + "\n";
     to_python << folder_name + "\n";
     for(int i = 0; i<frames.size(); i++){
@@ -59,7 +59,7 @@ bool generate_video(Runtime *proc, vector<string> tokens){
     }
     if(frames.empty()) to_python << "nil";
     to_python.close();
-    // system("python main.py");
+    system("python main.py");
     // system("rm _images_");
     return true;
 }
@@ -83,7 +83,7 @@ bool generate_pdf(Runtime *proc, vector<string> tokens){
         }
     }
     ofstream to_python("_images_");
-    to_python << "PDF\n";
+    to_python << "PDF " + to_string(proc->get_page_width()) + " " + to_string(proc->get_page_height()) + "\n";
     to_python << tokens[1] + "\n";
     to_python << folder_name + "\n";
     for(int i = 0; i<frames.size(); i++){
@@ -95,7 +95,7 @@ bool generate_pdf(Runtime *proc, vector<string> tokens){
     }
     if(frames.empty()) to_python << "nil";
     to_python.close();
-    // system("python main.py");
+    system("python main.py");
     // system("rm _images_");
     return true;
 }

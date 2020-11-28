@@ -47,16 +47,17 @@ public:
         file_names.push_back(file_name);
         return true;
     }
-    std::vector<std::string> convert_to_ulist(int start, int end, int quantum){
+    std::vector<std::string> convert_to_ulist(int start, int end, int fps){
         if(end==-1) end = file_names.size();
         if(end>file_names.size()){
             std::cout << "out of bound" << std::endl;
             return {};
         }
+        if(fps<0) fps = 1;
         std::vector<std::string> _frames;
         for(int i = start; i<end; i++){
             if(timed){
-                for(int j = intervals[i].first; j<intervals[i].second; j++){
+                for(int j = fps*intervals[i].first; j<fps*intervals[i].second; j++){
                     _frames.push_back({file_names[i]});
                 }
             }
@@ -267,6 +268,24 @@ public:
         frame_variable_table[frames] = frame_variables.size();
         return true;
     }
+    int get_fps(){
+        int fps = 1;
+        if(position_variables["FPS"]=="") fps = 1;
+        else{
+            std::string fps_str = position_variables["FPS"];
+            int i = 0;
+            if(fps_str.size()!=1 && fps_str[i]=='-') i = 1;
+            for(; i<fps_str.size(); i++){
+                if(fps_str[i]>'9' || fps_str[i]<'0'){
+                    std::cout << "FPS should be a number" << std::endl;
+                    return 1;
+                }
+            }
+            // std::cout << fps << std::endl;
+            fps = stoi(fps_str);
+        }
+        return fps;
+    }
     bool tlist_to_ulist(std::string tlist, std::string ulist){
         if(image_variable_table[tlist]==0){
             std::cout << "No variable named " << tlist << std::endl;
@@ -278,13 +297,44 @@ public:
             return false;
         }
         List *list = new List(false);
-        if(!list->assign_untimed(image_variables[location]->convert_to_ulist(0, -1, 1))){
+        int fps = get_fps();
+        if(!list->assign_untimed(image_variables[location]->convert_to_ulist(0, -1, fps))){
             std::cout << "Error occured while converting" << std::endl;
             return false;
         }
         image_variables.push_back(list);
         image_variable_table[ulist] = image_variables.size();
         return true;
+    }
+    int get_page_width(){
+        int fps = 800;
+        if(position_variables["PAGE_WIDTH"]=="") fps = 800;
+        else{
+            std::string fps_str = position_variables["PAGE_WIDTH"];
+            for(int i = 0; i<fps_str.size(); i++){
+                if(fps_str[i]>'9' || fps_str[i]<'0'){
+                    std::cout << "PAGE_WIDTH should be a number" << std::endl;
+                    return 800;
+                }
+            }
+            fps = stoi(fps_str);
+        }
+        return fps;
+    }
+    int get_page_height(){
+        int fps = 800;
+        if(position_variables["PAGE_HEIGHT"]=="") fps = 800;
+        else{
+            std::string fps_str = position_variables["PAGE_HEIGHT"];
+            for(int i = 0; i<fps_str.size(); i++){
+                if(fps_str[i]>'9' || fps_str[i]<'0'){
+                    std::cout << "PAGE_HEIGHT should be a number" << std::endl;
+                    return 800;
+                }
+            }
+            fps = stoi(fps_str);
+        }
+        return fps;
     }
     void add_position(std::string variable_name, std::string value){
         position_variables[variable_name] = value;
